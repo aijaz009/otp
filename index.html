@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Sender API Test</title>
+    <title>Send OTP Email API Test</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
@@ -21,7 +21,7 @@
             display: block;
             margin: 10px 0 5px;
         }
-        input, textarea, select {
+        input, textarea {
             width: 100%;
             padding: 8px;
             margin-bottom: 10px;
@@ -49,24 +49,24 @@
     </style>
 </head>
 <body>
-    <h1>Email Sender API Test</h1>
+    <h1>Send OTP Email API Test</h1>
     <form id="api-form">
-        <label for="sendto">Send To:</label>
-        <input type="email" id="sendto" placeholder="recipient@example.com" required>
+        <label for="subject">Subject:</label>
+        <input type="text" id="subject" value="Account OTP" required>
 
-        <label for="name">Name:</label>
-        <input type="text" id="name" placeholder="Your Name" required>
+        <label for="from">From:</label>
+        <input type="email" id="from" value="gateway.smtp587@gmail.com" required>
 
-        <label for="replyTo">Reply To:</label>
-        <input type="email" id="replyTo" placeholder="reply@example.com" required>
+        <label for="to">To:</label>
+        <input type="email" id="to" placeholder="recipient@example.com" required>
 
-        <label for="title">Email Title:</label>
-        <input type="text" id="title" placeholder="Email Subject" required>
+        <label for="senders_name">Sender's Name:</label>
+        <input type="text" id="senders_name" value="Company Name" required>
 
         <label for="body">Email Body:</label>
-        <textarea id="body" rows="5" placeholder="Email content" required></textarea>
+        <textarea id="body" rows="5" placeholder="Your OTP is 12453" required></textarea>
 
-        <button type="submit">Send Email</button>
+        <button type="submit">Send OTP Email</button>
     </form>
 
     <h2>Response:</h2>
@@ -79,20 +79,19 @@
             const settings = {
                 async: true,
                 crossDomain: true,
-                url: 'https://mail-sender-api1.p.rapidapi.com/',
+                url: 'https://send-bulk-emails.p.rapidapi.com/api/send/otp/mail',
                 method: 'POST',
                 headers: {
                     'x-rapidapi-key': 'Qin9902wJRmshsTE54XUIARXzJqbp1JjOD8jsnrGlWi9N1m6jO',
-                    'x-rapidapi-host': 'mail-sender-api1.p.rapidapi.com',
+                    'x-rapidapi-host': 'send-bulk-emails.p.rapidapi.com',
                     'Content-Type': 'application/json'
                 },
                 processData: false,
                 data: JSON.stringify({
-                    sendto: $('#sendto').val(),
-                    name: $('#name').val(),
-                    replyTo: $('#replyTo').val(),
-                    ishtml: "false",
-                    title: $('#title').val(),
+                    subject: $('#subject').val(),
+                    from: $('#from').val(),
+                    to: $('#to').val(),
+                    senders_name: $('#senders_name').val(),
                     body: $('#body').val()
                 })
             };
