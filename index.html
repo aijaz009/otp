@@ -101,7 +101,8 @@
                 const response = await $.ajax(settings);
                 $('#response').text(JSON.stringify(response, null, 2));
             } catch (error) {
-                $('#response').text(`Error: ${error.responseText}`);
+                console.error("Error:", error);
+                $('#response').text(`Error: ${error.responseText || error.message}`);
             }
         });
     </script>
