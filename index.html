@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Email via RapidMail API</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Send Email</h1>
+    <form id="emailForm">
+        <input type="email" id="email" placeholder="Recipient Email" required>
+        <input type="text" id="name" placeholder="Your Name" required>
+        <input type="text" id="replyTo" placeholder="Reply To Email" required>
+        <input type="text" id="title" placeholder="Email Title" required>
+        <textarea id="body" placeholder="Email Body" required></textarea>
+        <button type="submit">Send Email</button>
+    </form>
+    <div id="response"></div>
+
+    <script>
+        $('#emailForm').on('submit', function(e) {
+            e.preventDefault();
+
+            const settings = {
+                async: true,
+                crossDomain: true,
+                url: 'https://rapidmail.p.rapidapi.com/',
+                method: 'POST',
+                headers: {
+                    'x-rapidapi-key': 'Qin9902wJRmshsTE54XUIARXzJqbp1JjOD8jsnrGlWi9N1m6jO',
+                    'x-rapidapi-host': 'rapidmail.p.rapidapi.com',
+                    'Content-Type': 'application/json'
+                },
+                processData: false,
+                data: JSON.stringify({
+                    ishtml: "false",
+                    sendto: $('#email').val(),
+                    name: $('#name').val(),
+                    replyTo: $('#replyTo').val(),
+                    title: $('#title').val(),
+                    body: $('#body').val()
+                })
+            };
+
+            $.ajax(settings).done(function(response) {
+                $('#response').html('<p>Email sent successfully!</p>');
+                console.log(response);
+            }).fail(function(jqXHR, textStatus) {
+                $('#response').html('<p>Error sending email: ' + textStatus + '</p>');
+                console.error(jqXHR);
+            });
+        });
+    </script>
+</body>
+</html>
