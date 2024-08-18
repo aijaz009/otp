@@ -3,77 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Send OTP via RapidMail API</title>
+    <title>Email Sender API Test</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 20px;
             padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            max-width: 600px;
         }
-        input, textarea {
+        h1 {
+            text-align: center;
+        }
+        label {
             display: block;
-            margin: 10px 0;
-            padding: 10px;
-            width: 300px;
+            margin: 10px 0 5px;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
         button {
             padding: 10px 15px;
-            background-color: #4CAF50;
+            background-color: #28a745;
             color: white;
             border: none;
+            border-radius: 4px;
             cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
         }
         #response {
             margin-top: 20px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #f8f9fa;
         }
     </style>
 </head>
 <body>
-    <h1>Send OTP Email</h1>
-    <form id="otpForm">
-        <input type="email" id="sendto" placeholder="Recipient Email" required>
+    <h1>Email Sender API Test</h1>
+    <form id="api-form">
+        <label for="sendto">Send To:</label>
+        <input type="email" id="sendto" placeholder="recipient@example.com" required>
+
+        <label for="name">Name:</label>
         <input type="text" id="name" placeholder="Your Name" required>
-        <input type="text" id="replyTo" placeholder="Reply To Email" required>
-        <input type="text" id="title" placeholder="Email Title" required>
-        <textarea id="body" placeholder="Email Body" required></textarea>
-        <button type="submit">Send OTP</button>
+
+        <label for="replyTo">Reply To:</label>
+        <input type="email" id="replyTo" placeholder="reply@example.com" required>
+
+        <label for="title">Email Title:</label>
+        <input type="text" id="title" placeholder="Email Subject" required>
+
+        <label for="body">Email Body:</label>
+        <textarea id="body" rows="5" placeholder="Email content" required></textarea>
+
+        <button type="submit">Send Email</button>
     </form>
-    <div id="response"></div>
+
+    <h2>Response:</h2>
+    <pre id="response"></pre>
 
     <script>
-        $('#otpForm').on('submit', function(e) {
+        $('#api-form').on('submit', async function (e) {
             e.preventDefault();
 
             const settings = {
                 async: true,
                 crossDomain: true,
-                url: 'https://rapidmail.p.rapidapi.com/',
+                url: 'https://mail-sender-api1.p.rapidapi.com/',
                 method: 'POST',
                 headers: {
-                    'x-rapidapi-key': 'Qin9902wJRmshsTE54XUIARXzJqbp1JjOD8jsnrGlWi9N1m6jO', // Your API key
-                    'x-rapidapi-host': 'rapidmail.p.rapidapi.com',
+                    'x-rapidapi-key': 'Qin9902wJRmshsTE54XUIARXzJqbp1JjOD8jsnrGlWi9N1m6jO',
+                    'x-rapidapi-host': 'mail-sender-api1.p.rapidapi.com',
                     'Content-Type': 'application/json'
                 },
                 processData: false,
                 data: JSON.stringify({
-                    ishtml: "false",
                     sendto: $('#sendto').val(),
                     name: $('#name').val(),
                     replyTo: $('#replyTo').val(),
+                    ishtml: "false",
                     title: $('#title').val(),
                     body: $('#body').val()
                 })
             };
 
-            $.ajax(settings)
-                .done(function(response) {
-                    $('#response').html('<p>Email sent successfully!</p>');
-                    console.log(response);
-                })
-                .fail(function(jqXHR, textStatus) {
-                    $('#response').html('<p>Error sending email: ' + jqXHR.responseText + '</p>');
-                    console.error('Error:', textStatus, jqXHR);
-                });
+            try {
+                const response = await $.ajax(settings);
+                $('#response').text(JSON.stringify(response, null, 2));
+            } catch (error) {
+                $('#response').text(`Error: ${error.responseText}`);
+            }
         });
     </script>
 </body>
